@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon.png">
+<meta name="theme-color" content="#0e7c86">
+<title>Meu roteiro de viagem</title>
+<style>
+:root{--bg:#eaf0f1;--surface:#fbfdfd;--ink:#13263a;--muted:#5c6f80;--line:#cfdadd;--accent:#0e7c86;--accent-ink:#fff;--warn:#b4432f;--soft:#dcebee;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1a24;--surface:#162532;--ink:#e6eef2;--muted:#93a6b4;--line:#27394a;--accent:#3cc1cc;--accent-ink:#06222a;--warn:#ef8a74;--soft:#1d3342}}
+:root[data-theme="dark"]{--bg:#0e1a24;--surface:#162532;--ink:#e6eef2;--muted:#93a6b4;--line:#27394a;--accent:#3cc1cc;--accent-ink:#06222a;--warn:#ef8a74;--soft:#1d3342}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 "Instrument Sans",system-ui,sans-serif}
+main{max-width:780px;margin:0 auto;padding:20px 16px 64px}
+h1,h2,h3{font-family:"Bricolage Grotesque","Instrument Sans",system-ui,sans-serif;margin:0}
+input,select,button,textarea{font:inherit;color:inherit}
+input,select,textarea{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:9px 10px;min-width:0;width:100%}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+button{cursor:pointer;border-radius:8px;border:1px solid var(--line);background:var(--surface);padding:9px 14px;font-weight:500}
+button.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+button.ghost{border-color:transparent;background:none;color:var(--muted);padding:6px 8px;font-size:14px}
+button.ghost:hover{color:var(--accent)}button.ghost.del:hover{color:var(--warn)}
+.title{font:700 clamp(28px,7vw,42px)/1.1 "Bricolage Grotesque",system-ui,sans-serif;border:0;background:none;padding:4px 0;border-bottom:2px solid var(--line);border-radius:0}
+.title:focus{border-color:var(--accent);outline:none}
+.meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+.meta label{display:flex;flex-direction:column;font-size:13px;color:var(--muted);gap:3px;flex:1 1 130px}
+.stats{display:flex;gap:22px;flex-wrap:wrap;margin:18px 0;font-size:14px;color:var(--muted)}
+.stats b{display:block;font:700 24px/1.1 "Bricolage Grotesque",system-ui,sans-serif;color:var(--ink)}
+.tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;border-bottom:1px solid var(--line)}
+.tabs button{border:0;border-radius:8px 8px 0 0;background:none;color:var(--muted);white-space:nowrap}
+.tabs button[aria-selected="true"]{background:var(--surface);color:var(--ink);box-shadow:inset 0 -2px var(--accent)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;margin-top:14px;padding:16px}
+.head{display:flex;align-items:baseline;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.head h2{font-size:21px}.head small{color:var(--muted);font-size:14px;margin-left:8px;font-family:"Instrument Sans",system-ui,sans-serif;font-weight:400}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 2px}
+.chip{background:var(--soft);border-radius:999px;padding:3px 10px;font-size:13px}
+.row{display:grid;grid-template-columns:56px 1fr auto;gap:2px 12px;padding:10px 0;border-top:1px solid var(--line);align-items:start}
+.row:first-of-type{border-top:0}
+.time{font-weight:600;font-variant-numeric:tabular-nums}
+.what{display:flex;flex-direction:column;gap:1px}.what small{color:var(--muted)}
+.what.done strong{text-decoration:line-through;color:var(--muted)}
+.right{display:flex;align-items:center;gap:2px;flex-wrap:wrap;justify-content:flex-end}
+.cost{color:var(--muted);font-size:14px;font-variant-numeric:tabular-nums;margin-right:6px}
+.empty{color:var(--muted);margin:8px 0 0}
+.bar{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+.sum{display:flex;justify-content:space-between;padding:8px 0;border-top:1px solid var(--line)}.sum:first-of-type{border:0}
+dialog{border:1px solid var(--line);border-radius:14px;background:var(--surface);color:var(--ink);width:min(94vw,520px);padding:18px}
+dialog::backdrop{background:rgba(10,20,30,.5)}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
+.fields label{display:flex;flex-direction:column;font-size:13px;color:var(--muted);gap:3px}
+.fields .w{grid-column:1/-1}textarea{min-height:76px;resize:vertical}
+.lk{color:var(--accent);font-size:14px;margin-right:10px}#tx{width:100vw;height:100vh;max-width:none;max-height:none;margin:0;border:0;border-radius:0;background:#fff;color:#000;text-align:center;padding:24px}#tx::backdrop{background:#fff}.cn1{font-size:min(13vw,18vh);font-weight:700;line-height:1.2}.cn2{font-size:min(8vw,10vh);margin-top:3vh;line-height:1.3}.cn3{font-size:min(5vw,6vh);margin-top:3vh}.cn4{font-size:min(4vw,5vh);margin-top:2vh;color:#555}
+.clocks{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0 14px}.clock{display:flex;flex-direction:column;gap:2px}.clock small{color:var(--muted)}.big{font:700 40px/1.1 "Bricolage Grotesque",system-ui,sans-serif;font-variant-numeric:tabular-nums}
+@media (max-width:480px){.fields{grid-template-columns:1fr}.row{grid-template-columns:48px 1fr}.right{grid-column:2}}
+</style>
+</head>
+<body>
+<main>
+  <input class="title" id="title" placeholder="Nome da viagem" aria-label="Nome da viagem">
+  <div class="meta">
+    <label>Data de início<input id="start" type="date"></label>
+    <label>Moeda<input id="cur" maxlength="4" placeholder="€"></label>
+  </div>
+  <div class="stats" id="stats"></div>
+  <div class="tabs" role="tablist" id="tabs"></div>
+  <div id="view"></div>
+  <div class="bar"><button id="backup">Backup dos dados</button></div>
+</main>
+<dialog id="tx"><div id="txb"></div><button class="primary" id="txc" style="position:fixed;bottom:16px;right:16px">Fechar</button></dialog>
+<dialog id="dlg">
+  <form id="f"><h2 id="dt" style="font-size:20px"></h2><div class="fields" id="ff"></div>
+  <div class="bar" style="margin:0"><button class="primary" type="submit">Salvar</button><button type="button" id="cancel">Cancelar</button></div></form>
+</dialog>
+<dialog id="bk">
+  <h2 style="font-size:20px">Backup dos dados</h2>
+  <p class="empty">Copie este texto para guardar seu roteiro. Para restaurar, cole um backup aqui e use Carregar.</p>
+  <textarea id="bt" style="min-height:220px;margin:10px 0"></textarea>
+  <div class="bar" style="margin:0"><button class="primary" id="load">Carregar</button><button id="dlj">Baixar arquivo .json</button><button id="bc">Fechar</button></div><div class="bar"><label style="font-size:13px;color:var(--muted)">Importar arquivo .json<input id="impf" type="file" accept=".json,application/json"></label></div>
+</dialog>
+<script>
+var KEY="roteiro-v2",TABS=[["it","Itinerário"],["fl","Voos"],["ht","Hotéis"],["cl","Relógios"],["bk","Reservas"],["de","Destinos"],["dc","Documentos"],["ch","China"],["or","Orçamento"]],TYPES=["Voo","Hotel","Bilhete","Outro"],ICON={Voo:"✈️",Hotel:"🏨",Bilhete:"🎫",Outro:"📌"};
+var F={
+ item:[["time","Horário","time"],["cost","Custo","number"],["ccy","Moeda do custo","select",0,"",["Principal","CNY (yuan)"]],["title","Atividade","text",1,"w"],["place","Local","text",0,"w"],["address","Endereço","text",0,"w"],["addr_cn","Endereço em chinês (para mostrar ao taxista)","text",0,"w"],["name_cn","Nome do local em chinês","text",0,"w"],["phone","Telefone do local","text",0,"w"],["notes","Detalhes","textarea",0,"w"]],
+ book:[["type","Tipo","select",0,"",TYPES],["title","Nome","text",1],["date","Data","date"],["time","Horário","time"],["date2","Até (opcional)","date"],["cost","Custo","number"],["ccy","Moeda do custo","select",0,"",["Principal","CNY (yuan)"]],["code","Código da reserva","text",0,"w"],["address","Endereço ou terminal","text",0,"w"],["addr_cn","Endereço em chinês (para mostrar ao taxista)","text",0,"w"],["name_cn","Nome do local em chinês","text",0,"w"],["phone","Telefone do local","text",0,"w"],["notes","Detalhes (assento, portão, escala)","textarea",0,"w"]],
+ dest:[["name","Destino","text",1,"w"],["name_cn","Nome em chinês","text",0,"w"],["notes","Notas","textarea",0,"w"]],
+ day:[["label","Título do dia","text",0,"w"]]};
+F.pax=[["p0","Passageiro 1","text"],["p1","Passageiro 2","text"],["p2","Passageiro 3","text"],["p3","Bebê (no colo)","text"]];
+F.hotel=[["city","Cidade","text",1],["name","Nome do hotel","text",1],["name_cn","Nome em chinês","text",0,"w"],["in","Entrada","date"],["out","Saída","date"],["addr_en","Endereço (inglês)","text",0,"w"],["addr_cn","Endereço em chinês","text",0,"w"],["phone","Telefone","text",0,"w"],["code","Código da reserva","text",0,"w"],["notes","Detalhes","textarea",0,"w"]];
+function seed(){var d=[];for(var i=0;i<28;i++)d.push({label:"",items:[]});
+d[0]={label:"Saída de Madrid",items:[{time:"10:45",title:"Voo de Madrid para a China",place:"Aeroporto de Madrid Adolfo Suárez-Barajas",notes:"O voo sai às 10:45, horário de Madrid."}]};
+d[1]={label:"Chegada na China",items:[{time:"05:20",title:"Chegada em Chongqing",place:"Chongqing",notes:"Escala de 02:35."},{time:"07:55",title:"Segundo voo, para Shenzhen",place:"Chongqing"},{time:"09:55",title:"Chegada em Shenzhen",place:"Shenzhen"}]};
+[10,11,12].forEach(function(i){d[i]={label:"Feira dental",items:[{title:"Shenzhen International Dental High Tech Expo",place:"Shenzhen World Exhibition & Convention Center"}]}});
+d[26]={label:"Saída da China",items:[{time:"00:55",title:"Saída da China",place:"Aeroporto Internacional de Guangzhou Baiyun"},{time:"05:10",title:"Chegada em Doha",place:"Doha"},{title:"Hotel em Doha",place:"Safir Hotel Doha"}]};
+d[27]={label:"Saída de Doha e chegada no Brasil",items:[{time:"01:35",title:"Saída de Doha",place:"Aeroporto Internacional de Hamad"},{time:"10:40",title:"Chegada em Guarulhos",place:"Aeroporto Internacional de São Paulo/Guarulhos",notes:"Escala de 04:50."},{time:"17:15",title:"Chegada em Foz do Iguaçu",place:"Foz do Iguaçu"}]};
+return{title:"Viagem para China, Madrid e mais",start:"2026-11-29",cur:"€",tab:"it",days:d,
+dests:[{name:"Madrid"},{name:"China",notes:"Chongqing (escala) e Shenzhen"},{name:"Doha"},{name:"São Paulo"},{name:"Foz do Iguaçu"}],
+book:[{type:"Voo",title:"Madrid → Chongqing → Shenzhen",date:"2026-11-29",time:"10:45",address:"Aeroporto de Madrid Adolfo Suárez-Barajas",notes:"Chegada em Chongqing às 05:20 (30/11), com escala de 02:35. Segundo voo às 07:55, chegada em Shenzhen às 09:55."},
+{type:"Voo",title:"Guangzhou → Doha",date:"2026-12-25",time:"00:55",address:"Aeroporto Internacional de Guangzhou Baiyun",notes:"Chegada em Doha às 05:10."},
+{type:"Hotel",title:"Safir Hotel Doha",date:"2026-12-25",date2:"2026-12-26",notes:"Nosso hotel em Doha."},
+{type:"Voo",title:"Doha → São Paulo → Foz do Iguaçu",date:"2026-12-26",time:"01:35",address:"Aeroporto Internacional de Hamad",notes:"Chegada em Guarulhos às 10:40, com escala de 04:50. Chegada em Foz do Iguaçu às 17:15."}]}}
+var S;try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){}if(!S||!S.days)S=seed();
+if(!S.v3){S.v3=1;S.rate=S.rate||0.12;S.rateb=S.rateb||0.75;S.chk=S.chk||[];[["Shenzhen","深圳"],["Guangzhou","广州"],["Chongqing","重庆"]].forEach(function(c){if(!S.dests.some(function(d){return d.name===c[0]}))S.dests.push({name:c[0],name_cn:c[1]})});try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+if(!S.v4){S.v4=1;S.pax=S.pax||["Passageiro 1","Passageiro 2","Passageiro 3","Bebê"];S.hotels=S.hotels||[{city:"Doha",name:"Safir Hotel Doha",in:"2026-12-25",out:"2026-12-26",notes:"Nosso hotel em Doha."}];S.flights=S.flights||[{route:"Madrid → Chongqing",date:"2026-11-29",dep:"10:45",depTz:"Madrid",depAp:"Aeroporto de Madrid Adolfo Suárez-Barajas",adate:"2026-11-30",arr:"05:20",arrTz:"China",arrAp:"Chongqing",notes:"Escala de 02:35 em Chongqing."},{route:"Chongqing → Shenzhen",date:"2026-11-30",dep:"07:55",depTz:"China",depAp:"Chongqing",adate:"2026-11-30",arr:"09:55",arrTz:"China",arrAp:"Shenzhen"},{route:"Guangzhou → Doha",date:"2026-12-25",dep:"00:55",depTz:"China",depAp:"Aeroporto Internacional de Guangzhou Baiyun",adate:"2026-12-25",arr:"05:10",arrTz:"Doha",arrAp:"Doha"},{route:"Doha → São Paulo",date:"2026-12-26",dep:"01:35",depTz:"Doha",depAp:"Aeroporto Internacional de Hamad",adate:"2026-12-26",arr:"10:40",arrTz:"Brasil",arrAp:"Aeroporto Internacional de São Paulo/Guarulhos",notes:"Escala de 04:50 em Guarulhos."},{route:"São Paulo → Foz do Iguaçu",date:"2026-12-26",dep:"15:30",depTz:"Brasil",depAp:"Aeroporto Internacional de São Paulo/Guarulhos",adate:"2026-12-26",arr:"17:15",arrTz:"Brasil",arrAp:"Foz do Iguaçu",notes:"Saída calculada a partir da escala de 04:50. Confirme na passagem."}];try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function $(i){return document.getElementById(i)}
+function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function money(n){return (Math.round(n*100)/100).toLocaleString("pt-BR")+" "+(S.cur||"")}
+function dd(i){if(!S.start)return null;var d=new Date(S.start+"T12:00:00");d.setDate(d.getDate()+i);return d}
+function iso(i){var d=dd(i);return d?d.toISOString().slice(0,10):""}
+function nice(s){if(!s)return"";var d=new Date(s+"T12:00:00");return d.toLocaleDateString("pt-BR",{day:"numeric",month:"short"})}
+function lbl(i){var d=dd(i);return d?d.toLocaleDateString("pt-BR",{weekday:"long",day:"numeric",month:"long"}):""}
+function sortT(a,b){return (a.time||"99:99").localeCompare(b.time||"99:99")}
+function totals(){var t={Atividades:0,Voo:0,Hotel:0,Bilhete:0,Outro:0};S.days.forEach(function(d){d.items.forEach(function(x){t.Atividades+=cv(x)})});S.book.forEach(function(b){t[b.type]=(t[b.type]||0)+cv(b)});return t}
+function btns(a,d,k){return '<button class="ghost" data-a="e'+a+'" data-d="'+d+'" data-k="'+k+'">Editar</button><button class="ghost del" data-a="x'+a+'" data-d="'+d+'" data-k="'+k+'">Remover</button>'}
+function vIt(){return S.days.map(function(d,di){var dt=iso(di),bs=S.book.filter(function(b){return b.date===dt}),n=0;
+var its=d.items.map(function(x,k){return{x:x,k:k}}).sort(function(a,b){return sortT(a.x,b.x)});
+return '<section class="card"><div class="head"><h2>Dia '+(di+1)+'<small>'+esc(lbl(di))+'</small></h2><span><button class="ghost" data-a="eday" data-d="'+di+'">'+(d.label?esc(d.label):"Dar título")+'</button></span></div>'+
+(bs.length?'<div class="chips">'+bs.map(function(b){return'<span class="chip">'+ICON[b.type]+" "+esc(b.title)+(b.time?" às "+esc(b.time):"")+'</span>'}).join("")+'</div>':"")+
+(its.length?its.map(function(o){var x=o.x;return'<div class="row"><span class="time">'+esc(x.time||"–")+'</span><div class="what'+(x.done?" done":"")+'"><strong>'+esc(x.title)+'</strong>'+(x.place?'<small>'+esc(x.place)+'</small>':"")+(x.address?'<small>'+esc(x.address)+'</small>':"")+(x.addr_cn?'<span lang="zh-CN" style="font-size:20px">'+esc(x.addr_cn)+'</span><span><button class="ghost" data-a="cardi" data-d="'+di+'" data-k="'+o.k+'">Mostrar ao taxista</button>'+maps(x.addr_cn)+'</span>':"")+(x.notes?'<small>'+esc(x.notes)+'</small>':"")+'</div><div class="right">'+(x.cost?'<span class="cost">'+esc(cs(x))+'</span>':"")+'<input type="checkbox" style="width:auto" data-a="done" data-d="'+di+'" data-k="'+o.k+'" aria-label="Concluída"'+(x.done?" checked":"")+'>'+btns("item",di,o.k)+'</div></div>'}).join(""):'<p class="empty">Nada planejado ainda.</p>')+
+'<div class="bar" style="margin-top:10px"><button data-a="aitem" data-d="'+di+'">Adicionar atividade</button>'+(di===S.days.length-1&&di>0?'<button class="ghost del" data-a="xday">Remover este dia</button>':"")+'</div></section>'}).join("")+'<div class="bar"><button class="primary" data-a="aday">Adicionar dia</button></div>'}
+function vBk(){var l=S.book.map(function(b,i){return{b:b,i:i}}).sort(function(a,c){return (a.b.date||"9").localeCompare(c.b.date||"9")||sortT(a.b,c.b)});
+return '<div class="bar"><button class="primary" data-a="abook">Adicionar reserva</button></div>'+(l.length?l.map(function(o){var b=o.b;return'<section class="card"><div class="head"><h2>'+ICON[b.type]+" "+esc(b.title)+'</h2><span>'+btns("book",0,o.i)+'</span></div><div class="what"><small>'+esc(b.type)+(b.date?" · "+nice(b.date)+(b.date2?" a "+nice(b.date2):"")+(b.time?" às "+esc(b.time):""):"")+'</small>'+(b.code?'<span>Código: <strong>'+esc(b.code)+'</strong></span>':"")+(b.address?'<small>'+esc(b.address)+'</small>':"")+(b.addr_cn?'<span lang="zh-CN" style="font-size:20px">'+esc(b.addr_cn)+'</span><span><button class="ghost" data-a="cardb" data-k="'+o.i+'">Mostrar ao taxista</button>'+maps(b.addr_cn)+'</span>':"")+(b.notes?'<small>'+esc(b.notes)+'</small>':"")+(b.cost?'<small>Custo: '+esc(cs(b))+'</small>':"")+'</div></section>'}).join(""):'<p class="empty">Adicione voos, hotéis, bilhetes e outras reservas.</p>')}
+function vDe(){return '<div class="bar"><button class="primary" data-a="adest">Adicionar destino</button></div>'+S.dests.map(function(d,i){return'<section class="card"><div class="head"><h2>'+esc(d.name)+(d.name_cn?' <span lang="zh-CN">'+esc(d.name_cn)+'</span>':"")+'</h2><span>'+(d.name_cn?'<button class="ghost" data-a="cardd" data-k="'+i+'">Mostrar</button>':"")+btns("dest",0,i)+'</span></div>'+(d.notes?'<p class="empty">'+esc(d.notes)+'</p>':"")+'</section>'}).join("")}
+function vOr(){var t=totals(),all=0;Object.keys(t).forEach(function(k){all+=t[k]});return '<section class="card"><div class="head"><h2>Total previsto</h2><h2>'+esc(money(all))+'</h2></div>'+Object.keys(t).map(function(k){return'<div class="sum"><span>'+k+'</span><span>'+esc(money(t[k]))+'</span></div>'}).join("")+'<p class="empty">Os valores vêm do campo Custo de cada atividade e reserva.</p></section>'}
+var TM,CL=[["Aqui","Horário do seu aparelho",Intl.DateTimeFormat().resolvedOptions().timeZone],["China","Chongqing, Shenzhen e Guangzhou","Asia/Shanghai"],["Doha","Catar","Asia/Riyadh"],["Brasil","São Paulo e Foz do Iguaçu","America/Sao_Paulo"],["Madrid","Espanha","Europe/Madrid"]];
+function off(tz,d){return (new Date(d.toLocaleString("en-US",{timeZone:tz}))-new Date(d.toLocaleString("en-US",{timeZone:"UTC"})))/36e5}
+function vCl(){return '<div class="clocks">'+CL.map(function(c,i){return'<section class="card clock"><div class="head"><h2>'+c[0]+'</h2></div><div class="big" id="ct'+i+'"></div><small id="cd'+i+'"></small><small>'+c[1]+'</small><small id="ci'+i+'"></small></section>'}).join("")+'</div>'}
+function tick(){var d=new Date(),me=-d.getTimezoneOffset()/60;CL.forEach(function(c,i){if(!$("ct"+i))return;var z={timeZone:c[2]},h=+new Intl.DateTimeFormat("en-GB",{timeZone:c[2],hour:"2-digit",hour12:false}).format(d)%24,o=off(c[2],d),df=o-me;
+$("ct"+i).textContent=new Intl.DateTimeFormat("pt-BR",{timeZone:c[2],hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:false}).format(d);$("cd"+i).textContent=new Intl.DateTimeFormat("pt-BR",{timeZone:c[2],weekday:"long",day:"numeric",month:"long"}).format(d);$("ci"+i).textContent=(h>=6&&h<20?"☀️ dia":"🌙 noite")+", UTC"+(o>=0?"+":"−")+Math.abs(o)+(i>0&&df!==0?", "+(df>0?"+":"−")+Math.abs(df)+" h em relação a você":"")})}
+function cv(x){var n=Number(x.cost)||0;return x.ccy&&x.ccy.indexOf("CNY")===0?n*(S.rate||0):n}
+function cs(x){var n=Number(x.cost)||0;return x.ccy&&x.ccy.indexOf("CNY")===0?n.toLocaleString("pt-BR")+" ¥ (≈ "+money(cv(x))+")":money(n)}
+function maps(q){var e=encodeURIComponent(q);return'<a class="lk" target="_blank" rel="noopener" href="https://maps.apple.com/?q='+e+'">Apple Maps</a><a class="lk" target="_blank" rel="noopener" href="https://uri.amap.com/search?keyword='+e+'">Amap</a>'}
+function card(r){var n=r.name_cn||"",a=r.addr_cn||"",t=r.phone||"";$("txb").innerHTML=(n?'<div lang="zh-CN" class="cn1">'+esc(n)+'</div>':"")+(a?'<div lang="zh-CN" class="cn2">'+esc(a)+'</div>':"")+(r.py?'<div class="cn3">'+esc(r.py)+'</div>':"")+(r.pt?'<div class="cn4">'+esc(r.pt)+'</div>':"")+(t?'<div class="cn3">Tel.: '+esc(t)+'</div>':"");$("tx").showModal()}
+var DL=[],PH=[["Preciso de ajuda","我需要帮助","Wǒ xūyào bāngzhù"],["Chame uma ambulância, por favor","请叫救护车","Qǐng jiào jiùhùchē"],["Onde fica a farmácia?","药店在哪里？","Yàodiàn zài nǎlǐ?"],["Onde fica a estação de trem?","火车站在哪里？","Huǒchēzhàn zài nǎlǐ?"],["Onde fica o banheiro?","洗手间在哪里？","Xǐshǒujiān zài nǎlǐ?"],["Quanto custa?","多少钱？","Duōshao qián?"],["Qual é a senha do Wi-Fi?","Wi-Fi密码是什么？","Wi-Fi mìmǎ shì shénme?"],["Pode me levar a este endereço?","请带我去这个地址","Qǐng dài wǒ qù zhège dìzhǐ"],["Sou alérgico(a) a amendoim","我对花生过敏","Wǒ duì huāshēng guòmǐn"],["Sou alérgico(a) a frutos do mar","我对海鲜过敏","Wǒ duì hǎixiān guòmǐn"],["Sou vegetariano(a)","我吃素","Wǒ chī sù"],["Não falo chinês","我不会说中文","Wǒ bú huì shuō Zhōngwén"],["Obrigado(a)","谢谢","Xièxie"]],CK=["Configurar Alipay ou WeChat Pay com cartão internacional","Baixar mapas offline","Testar eSIM e VPN","Conferir a validade dos passaportes","Salvar comprovantes de saída e reservas (aba Documentos)","Anotar os endereços dos hotéis em chinês","Fazer o backup dos dados"];
+function calc(){var o=$("cvo");if(!o)return;var a=parseFloat($("cva").value),b=parseFloat($("cvb").value),r=S.rate||0,t=[];if(a>=0)t.push("¥ "+a+" = "+money(a*r)+" = R$ "+(Math.round(a*(S.rateb||0)*100)/100));if(b>=0&&r>0)t.push(money(b)+" = ¥ "+(Math.round(b/r*100)/100));o.textContent=t.join("   ")}
+function vCh(){var ck=S.chk||[],m=esc(S.cur||"moeda principal");return'<section class="card"><h2>Conversor de moeda</h2><div class="fields"><label>1 yuan (¥) em '+m+'<input id="rate" type="number" step="any" value="'+(S.rate||"")+'"></label><label>1 yuan (¥) em R$<input id="rateb" type="number" step="any" value="'+(S.rateb||"")+'"></label><label>Yuan (¥)<input id="cva" type="number" step="any"></label><label>Valor em '+m+'<input id="cvb" type="number" step="any"></label></div><p id="cvo"></p><p class="empty">As taxas são fixas e editáveis. Atualize antes de viajar.</p></section><section class="card"><h2>Frases úteis</h2>'+PH.map(function(p,i){return'<div class="row" style="grid-template-columns:1fr auto"><div class="what"><strong>'+p[0]+'</strong><small lang="zh-CN">'+p[1]+'  '+p[2]+'</small></div><button class="ghost" data-a="phr" data-k="'+i+'">Mostrar</button></div>'}).join("")+'<p class="empty">Confira as frases de saúde e alergia com um falante nativo ou um tradutor offline.</p></section><section class="card"><h2>Emergência na China</h2><div class="sum"><span>Polícia</span><span>110</span></div><div class="sum"><span>Ambulância</span><span>120</span></div><div class="sum"><span>Bombeiros</span><span>119</span></div><div class="sum"><span>Acidente de trânsito</span><span>122</span></div></section><section class="card"><h2>Checklist antes de embarcar</h2>'+CK.map(function(t,i){return'<label class="sum" style="gap:10px;justify-content:flex-start"><input type="checkbox" style="width:auto" data-a="chk" data-k="'+i+'"'+(ck[i]?" checked":"")+'>'+t+'</label>'}).join("")+'</section>'}
+var DB;function idb(){return DB||(DB=new Promise(function(ok,no){var q=indexedDB.open("roteiro",1);q.onupgradeneeded=function(){q.result.createObjectStore("docs",{keyPath:"id",autoIncrement:true})};q.onsuccess=function(){ok(q.result)};q.onerror=function(){no(q.error)}}))}
+function dbx(m,fn){return idb().then(function(d){return new Promise(function(ok,no){var t=d.transaction("docs",m),r=fn(t.objectStore("docs"));t.oncomplete=function(){ok(r&&r.result)};t.onerror=function(){no(t.error)}})})}
+function shrink(f){return new Promise(function(ok){if(!/^image\//.test(f.type))return ok(f);var im=new Image(),u=URL.createObjectURL(f);im.onload=function(){var k=Math.min(1,1000/im.width),c=document.createElement("canvas");c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext("2d").drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);c.toBlob(function(b){ok(b||f)},"image/jpeg",0.8)};im.onerror=function(){ok(f)};im.src=u})}
+function addDocs(fl){var c=$("dcat").value,w=$("dwho").value,p=Promise.resolve();Array.prototype.forEach.call(fl,function(f){p=p.then(function(){return shrink(f)}).then(function(b){return dbx("readwrite",function(s){return s.add({name:f.name,type:b.type||f.type,blob:b,cat:c,who:w})})})});p.then(loadDocs).catch(function(){alert("Não foi possível salvar o arquivo neste navegador.")})}
+var DC=["Passaporte","Passagem","Seguro viagem","Reserva de hotel","Inscrição de feira","Vacina (febre amarela)","Outro"];
+function vDo(){return'<section class="card"><h2>Documentos offline</h2><p class="empty">Fotos, QR Codes e PDFs ficam salvos só neste aparelho e abrem sem internet. Cada pessoa precisa adicionar ou importar os arquivos no próprio celular. Nunca coloque documentos no repositório do GitHub.</p><div class="fields"><label>Categoria<select id="dcat">'+DC.map(function(c){return'<option>'+c+'</option>'}).join("")+'</select></label><label>De quem<select id="dwho"><option>Todos</option>'+S.pax.map(function(p){return'<option>'+esc(p)+'</option>'}).join("")+'</select></label><label class="w">Adicionar arquivos<input id="docf" type="file" multiple accept="image/*,application/pdf"></label></div><div class="bar"><button data-a="expd">Exportar documentos</button><label style="font-size:13px;color:var(--muted)">Importar documentos<input id="impd" type="file" accept=".json,application/json"></label></div></section><div id="dl"></div>'}
+function loadDocs(){dbx("readonly",function(s){return s.getAll()}).then(function(l){var e=$("dl");if(!e)return;DL=(l||[]).sort(function(a,b){return (a.cat||"Outro").localeCompare(b.cat||"Outro")});var last="";e.innerHTML=DL.length?'<section class="card">'+DL.map(function(d,i){var c=d.cat||"Outro",h=c!==last?'<h3 style="margin-top:10px">'+esc(c)+'</h3>':"";last=c;return h+'<div class="row" style="grid-template-columns:1fr auto"><div class="what"><strong>'+esc(d.name)+'</strong><small>'+esc(d.who||"Todos")+", "+Math.round(d.blob.size/1024)+' KB</small></div><div class="right"><button class="ghost" data-a="opdoc" data-k="'+i+'">Abrir</button><button class="ghost del" data-a="rmdoc" data-k="'+i+'">Remover</button></div></div>'}).join("")+'</section>':'<p class="empty">Nenhum arquivo ainda.</p>'}).catch(function(){var e=$("dl");if(e)e.innerHTML='<p class="empty">Armazenamento de arquivos indisponível neste navegador.</p>'})}
+function expDocs(){dbx("readonly",function(s){return s.getAll()}).then(function(l){return Promise.all((l||[]).map(function(d){return new Promise(function(ok){var r=new FileReader();r.onload=function(){ok({name:d.name,type:d.type,cat:d.cat,who:d.who,data:r.result})};r.readAsDataURL(d.blob)})}))}).then(function(a){var x=document.createElement("a");x.href=URL.createObjectURL(new Blob([JSON.stringify(a)],{type:"application/json"}));x.download="roteiro-documentos.json";document.body.appendChild(x);x.click();x.remove()})}
+function impDocs(f){if(!f)return;f.text().then(function(t){var a=JSON.parse(t),p=Promise.resolve();a.forEach(function(d){p=p.then(function(){return fetch(d.data)}).then(function(r){return r.blob()}).then(function(b){return dbx("readwrite",function(s){return s.add({name:d.name,type:d.type,cat:d.cat,who:d.who,blob:b})})})});return p}).then(loadDocs).catch(function(){alert("Arquivo de documentos inválido.")})}
+var ZN=["Madrid","China","Doha","Brasil"],TZ={Madrid:"Europe/Madrid",China:"Asia/Shanghai",Doha:"Asia/Riyadh",Brasil:"America/Sao_Paulo"};
+function FL(){var a=[["route","Trecho (ex.: Madrid → Chongqing)","text",1,"w"],["airline","Companhia","text"],["num","Número do voo","text"],["date","Data de saída","date"],["dep","Hora de saída","time"],["depTz","Fuso da saída","select",0,"",ZN],["depAp","Aeroporto de saída","text",0,"w"],["adate","Data de chegada","date"],["arr","Hora de chegada","time"],["arrTz","Fuso da chegada","select",0,"",ZN],["arrAp","Aeroporto de chegada","text",0,"w"],["code","Código da reserva","text",0,"w"]];S.pax.forEach(function(p,i){a.push(["s"+i,"Assento: "+p,"text"])});a.push(["notes","Detalhes (portão, bagagem, escala)","textarea",0,"w"]);return a}
+function oflight(r,t,d){F.flight=FL();openD("flight",r,t,d)}
+function ut(d,t,z){if(!d||!t||!TZ[z])return null;var p=d.split("-"),q=t.split(":"),u=Date.UTC(+p[0],p[1]-1,+p[2],+q[0],+q[1]);return u-off(TZ[z],new Date(u))*36e5}
+function lt(d,t,z){if(!d)return"";var x=new Date(d+"T12:00:00").toLocaleDateString("pt-BR",{weekday:"short",day:"numeric",month:"short"}),o=TZ[z]?off(TZ[z],new Date()):null;return x+(t?" às "+t:"")+(z?" ("+z+(o==null?"":", UTC"+(o>=0?"+":"−")+Math.abs(o))+")":"")}
+function fcard(f){var s=S.pax.map(function(p,j){return f["s"+j]?'<div class="cn3">'+esc(p)+': '+esc(f["s"+j])+'</div>':""}).join("");$("txb").innerHTML='<div class="cn1" style="font-size:min(9vw,12vh)">'+esc(f.route)+'</div><div class="cn2">'+esc((f.airline||"")+" "+(f.num||""))+'</div><div class="cn3">Saída '+esc(lt(f.date,f.dep,f.depTz))+'</div><div class="cn3">Chegada '+esc(lt(f.adate||f.date,f.arr,f.arrTz))+'</div>'+(f.code?'<div class="cn3">Reserva '+esc(f.code)+'</div>':"")+s;$("tx").showModal()}
+function vFl(){var l=S.flights.map(function(f,i){return{f:f,i:i}}).sort(function(a,b){return (ut(a.f.date,a.f.dep,a.f.depTz)||0)-(ut(b.f.date,b.f.dep,b.f.depTz)||0)});
+return'<section class="card"><div class="head"><h2>Passageiros</h2><button class="ghost" data-a="epax">Editar nomes</button></div><p class="empty">'+S.pax.map(function(p){return esc(p)}).join(", ")+'</p></section><div class="bar"><button class="primary" data-a="afl">Adicionar voo</button></div>'+l.map(function(o){var f=o.f,a=ut(f.date,f.dep,f.depTz),b=ut(f.adate||f.date,f.arr,f.arrTz),du=a!=null&&b!=null&&b>a?Math.floor((b-a)/6e4):0;
+return'<section class="card"><div class="head"><h2>✈️ '+esc(f.route)+'</h2><span><button class="ghost" data-a="fcard" data-k="'+o.i+'">Tela cheia</button>'+btns("fl",0,o.i)+'</span></div><div class="what">'+(f.airline||f.num?'<strong>'+esc((f.airline||"")+" "+(f.num||""))+'</strong>':"")+'<span>Saída: '+esc(lt(f.date,f.dep,f.depTz))+'</span>'+(f.depAp?'<small>'+esc(f.depAp)+'</small>':"")+'<span>Chegada: '+esc(lt(f.adate||f.date,f.arr,f.arrTz))+'</span>'+(f.arrAp?'<small>'+esc(f.arrAp)+'</small>':"")+(du?'<small>Duração: '+Math.floor(du/60)+' h '+du%60+' min</small>':"")+(f.code?'<span>Reserva: <strong>'+esc(f.code)+'</strong></span>':"")+S.pax.map(function(p,j){return f["s"+j]?'<small>'+esc(p)+': '+esc(f["s"+j])+'</small>':""}).join("")+(f.notes?'<small>'+esc(f.notes)+'</small>':"")+'</div></section>'}).join("")}
+function vHt(){var l=S.hotels.map(function(h,i){return{h:h,i:i}}).sort(function(a,b){return (a.h.in||"9").localeCompare(b.h.in||"9")});
+return'<div class="bar"><button class="primary" data-a="aht">Adicionar hotel</button></div>'+(l.length?l.map(function(o){var h=o.h,n=h.in&&h.out?Math.round((new Date(h.out)-new Date(h.in))/864e5):0;
+return'<section class="card"><div class="head"><h2>🏨 '+esc(h.name)+'<small>'+esc(h.city)+'</small></h2><span>'+btns("ht",0,o.i)+'</span></div><div class="what"><span>'+(h.in?nice(h.in):"")+(h.out?" a "+nice(h.out):"")+(n>0?", "+n+(n>1?" noites":" noite"):"")+'</span>'+(h.name_cn?'<span lang="zh-CN" style="font-size:20px">'+esc(h.name_cn)+'</span>':"")+(h.addr_en?'<small>'+esc(h.addr_en)+'</small>':"")+(h.addr_cn?'<span lang="zh-CN" style="font-size:20px">'+esc(h.addr_cn)+'</span>':"")+(h.phone?'<small>Tel.: <a class="lk" href="tel:'+esc(h.phone.replace(/\s/g,""))+'">'+esc(h.phone)+'</a></small>':"")+(h.code?'<small>Reserva: '+esc(h.code)+'</small>':"")+(h.notes?'<small>'+esc(h.notes)+'</small>':"")+'<span>'+(h.addr_cn||h.name_cn?'<button class="ghost" data-a="cardh" data-k="'+o.i+'">Mostrar ao taxista</button>':"")+(h.addr_cn||h.addr_en?maps(h.addr_cn||h.addr_en):"")+'</span></div></section>'}).join(""):'<p class="empty">Adicione os hotéis de cada cidade.</p>')}
+function openDoc(i){var d=DL[i];if(!d)return;var u=URL.createObjectURL(d.blob);if(/^image\//.test(d.type)){$("txb").innerHTML='<img alt="" src="'+u+'" style="max-width:100%;max-height:88vh">';$("tx").showModal()}else window.open(u,"_blank")}
+function rmDoc(i){var d=DL[i];if(d&&confirm("Remover este arquivo?"))dbx("readwrite",function(s){return s.delete(d.id)}).then(loadDocs)}
+function render(){var t=totals(),all=0,n=0;Object.keys(t).forEach(function(k){all+=t[k]});S.days.forEach(function(d){n+=d.items.length});
+$("stats").innerHTML='<div><b>'+S.days.length+'</b>dias</div><div><b>'+S.book.length+'</b>reservas</div><div><b>'+n+'</b>atividades</div><div><b>'+esc(money(all))+'</b>custo previsto</div>';
+$("tabs").innerHTML=TABS.map(function(t){return'<button role="tab" data-a="tab" data-t="'+t[0]+'" aria-selected="'+(S.tab===t[0])+'">'+t[1]+'</button>'}).join("");
+$("view").innerHTML={it:vIt,fl:vFl,ht:vHt,cl:vCl,bk:vBk,de:vDe,dc:vDo,ch:vCh,or:vOr}[S.tab]();clearInterval(TM);if(S.tab==="cl"){tick();TM=setInterval(tick,1000)}if(S.tab==="dc")loadDocs();if(S.tab==="ch")calc()}
+var cur=null;
+function openD(kind,rec,title,done){cur={kind:kind,rec:rec,done:done};$("dt").textContent=title;
+$("ff").innerHTML=F[kind].map(function(f){var v=rec[f[0]]||"",c=f[4]?' class="w"':"",inp=f[2]==="textarea"?'<textarea name="'+f[0]+'">'+esc(v)+'</textarea>':f[2]==="select"?'<select name="'+f[0]+'">'+f[5].map(function(o){return'<option'+(o===(v||f[5][0])?" selected":"")+'>'+o+'</option>'}).join("")+'</select>':'<input name="'+f[0]+'" type="'+f[2]+'"'+(f[2]==="number"?' step="any" min="0"':"")+(f[3]?" required":"")+' value="'+esc(v)+'">';
+return'<label'+c+'>'+f[1]+inp+'</label>'}).join("");$("dlg").showModal()}
+$("f").onsubmit=function(e){e.preventDefault();var v=new FormData(this);F[cur.kind].forEach(function(f){var x=v.get(f[0]);cur.rec[f[0]]=typeof x==="string"?x.trim():x});cur.done(cur.rec);save();render();$("dlg").close()};
+$("cancel").onclick=function(){$("dlg").close()};
+document.addEventListener("click",function(e){var b=e.target.closest("[data-a]");if(!b||b.type==="checkbox")return;var a=b.dataset.a,d=+b.dataset.d,k=+b.dataset.k;
+if(a==="tab"){S.tab=b.dataset.t;save();render()}
+else if(a==="cardi")card(S.days[d].items[k]);
+else if(a==="cardb")card(S.book[k]);
+else if(a==="cardd")card({name_cn:S.dests[k].name_cn});
+else if(a==="phr")card({name_cn:PH[k][1],py:PH[k][2],pt:PH[k][0]});
+else if(a==="opdoc")openDoc(k);
+else if(a==="rmdoc")rmDoc(k);
+else if(a==="expd")expDocs();
+else if(a==="afl")oflight({depTz:"Madrid",arrTz:"China"},"Novo voo",function(r){S.flights.push(r)});
+else if(a==="efl")oflight(S.flights[k],"Editar voo",function(){});
+else if(a==="xfl"){if(confirm("Remover este voo?")){S.flights.splice(k,1);save();render()}}
+else if(a==="fcard")fcard(S.flights[k]);
+else if(a==="epax")openD("pax",{p0:S.pax[0],p1:S.pax[1],p2:S.pax[2],p3:S.pax[3]},"Passageiros",function(r){S.pax=[r.p0,r.p1,r.p2,r.p3]});
+else if(a==="aht")openD("hotel",{},"Novo hotel",function(r){S.hotels.push(r)});
+else if(a==="eht")openD("hotel",S.hotels[k],"Editar hotel",function(){});
+else if(a==="xht"){if(confirm("Remover este hotel?")){S.hotels.splice(k,1);save();render()}}
+else if(a==="cardh")card(S.hotels[k]);
+else if(a==="aitem")openD("item",{},"Nova atividade",function(r){S.days[d].items.push(r)});
+else if(a==="eitem")openD("item",S.days[d].items[k],"Editar atividade",function(){});
+else if(a==="xitem"){if(confirm("Remover esta atividade?")){S.days[d].items.splice(k,1);save();render()}}
+else if(a==="eday")openD("day",S.days[d],"Título do dia "+(d+1),function(){});
+else if(a==="aday"){S.days.push({label:"",items:[]});save();render()}
+else if(a==="xday"){if(confirm("Remover o último dia e suas atividades?")){S.days.pop();save();render()}}
+else if(a==="abook")openD("book",{type:"Voo"},"Nova reserva",function(r){S.book.push(r)});
+else if(a==="ebook")openD("book",S.book[k],"Editar reserva",function(){});
+else if(a==="xbook"){if(confirm("Remover esta reserva?")){S.book.splice(k,1);save();render()}}
+else if(a==="adest")openD("dest",{},"Novo destino",function(r){S.dests.push(r)});
+else if(a==="edest")openD("dest",S.dests[k],"Editar destino",function(){});
+else if(a==="xdest"){if(confirm("Remover este destino?")){S.dests.splice(k,1);save();render()}}});
+document.addEventListener("change",function(e){var b=e.target;if(b.id==="docf"){addDocs(b.files);b.value=""}if(b.id==="impd"){impDocs(b.files[0]);b.value=""}if(b.dataset.a==="chk"){S.chk[+b.dataset.k]=b.checked;save()}if(b.dataset.a==="done"){S.days[+b.dataset.d].items[+b.dataset.k].done=b.checked;save();render()}});
+$("title").value=S.title;$("start").value=S.start;$("cur").value=S.cur;document.title=S.title||"Meu roteiro de viagem";
+$("title").oninput=function(){S.title=this.value;document.title=this.value||"Meu roteiro de viagem";save()};
+$("cur").oninput=function(){S.cur=this.value;save();render()};
+$("start").onchange=function(){S.start=this.value;save();render()};
+$("backup").onclick=function(){$("bt").value=JSON.stringify(S);$("bk").showModal()};
+$("bc").onclick=function(){$("bk").close()};
+$("load").onclick=function(){try{var o=JSON.parse($("bt").value);if(!o.days||!o.book)throw 1;S=o;save();location.reload()}catch(e){alert("Esse texto não é um backup válido.")}};
+$("txc").onclick=function(){$("tx").close()};
+$("dlj").onclick=function(){var a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(S)],{type:"application/json"}));a.download="roteiro-backup.json";document.body.appendChild(a);a.click();a.remove()};
+$("impf").onchange=function(){var f=this.files[0];if(!f)return;f.text().then(function(t){$("bt").value=t;$("load").click()})};
+document.addEventListener("input",function(e){var t=e.target;if(t.id==="rate"){S.rate=parseFloat(t.value)||0;save()}if(t.id==="rateb"){S.rateb=parseFloat(t.value)||0;save()}if(t.id==="cva"||t.id==="cvb"||t.id==="rate"||t.id==="rateb")calc()});
+try{if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js")}catch(e){}
+render();
+</script>
+</body>
+</html>
